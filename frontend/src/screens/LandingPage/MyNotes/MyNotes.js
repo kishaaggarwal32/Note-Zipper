@@ -1,12 +1,28 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
 import MainScreen from "../../../components/MainScreen";
 import { Accordion, Badge, Button, Card } from "react-bootstrap";
-import notes from "../../../data/notes";
+
+import { useEffect, useState } from "react";
+
 const MyNotes = () => {
+  const [notes, setNotes] = useState([]);
+
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure")) {
     }
   };
+
+  const fetchNotes = async () => {
+    const { data } = await axios.get("/api/notes");
+    setNotes(data);
+  };
+
+  console.log(notes);
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
   return (
     <MainScreen title="Welcome back Kisha Aggarwal...">
       <Link to="createnote">
@@ -15,7 +31,7 @@ const MyNotes = () => {
         </Button>
       </Link>
       {notes.map((note) => (
-        <Accordion defaultActiveKey="0">
+        <Accordion key={note._id}>
           <Card style={{ margin: 10 }}>
             <Card.Header style={{ display: "flex" }}>
               <span
